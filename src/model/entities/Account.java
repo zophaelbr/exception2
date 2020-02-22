@@ -1,9 +1,11 @@
 package model.entities;
 
+import model.exceptions.AcountException;
+
 public class Account {
 
 	private Integer number;
-	private String hoder;
+	private String holder;
 	private Double balance;
 	private Double withDrawLimit;
 	
@@ -13,7 +15,7 @@ public class Account {
 
 	public Account(Integer number, String hoder, Double balance, Double withDrawLimit) {
 		this.number = number;
-		this.hoder = hoder;
+		this.holder = hoder;
 		this.balance = balance;
 		this.withDrawLimit = withDrawLimit;
 	}
@@ -26,12 +28,12 @@ public class Account {
 		this.number = number;
 	}
 
-	public String getHoder() {
-		return hoder;
+	public String getHolder() {
+		return holder;
 	}
 
-	public void setHoder(String hoder) {
-		this.hoder = hoder;
+	public void setHolder(String hoder) {
+		this.holder = hoder;
 	}
 
 	public Double getBalance() {
@@ -46,14 +48,22 @@ public class Account {
 		this.withDrawLimit = withDrawLimit;
 	}
 
+	
 	public void deposit(Double amount) {
 		balance += amount;
 	}
 	
-	public void withDraw(Double amount) {
-		if (balance >= amount) {
-			balance -= amount;
-		}		
+	
+	public void withDraw(Double amount) throws AcountException {
+		if (balance < amount || withDrawLimit < amount) {
+			throw new AcountException("Withdraw error: The amount exceeds withdraw limit!");
+		}
+		
+		balance -= amount;
 	}
 	
+	@Override
+	public String toString() {
+		return "New balance: " + balance;
+	}
 }
